@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+        <item
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/settings">
+            <menu>
+                <item
+                    android:id="@+id/bookmark"
+                    android:icon="@drawable/bookmark"
+                    android:title="@string/bookmark" />
+                <item
+                    android:id="@+id/interest"
+                    android:icon="@drawable/inde"
+                    android:title="@string/interest" />
+                <item
+                    android:id="@+id/notification"
+                    android:icon="@drawable/notifiaction"
+                    android:title="@string/notification" />
+
+            </menu>
+        </item>
+
+
+    <item android:title="@string/information">
+        <menu>
+            <item
+                android:id="@+id/aboutus"
+                android:icon="@drawable/aboutus"
+                android:title="@string/about_us" />
+            <item
+                android:id="@+id/termsofuse"
+                android:icon="@drawable/terms"
+                android:title="@string/terms_of_use" />
+        </menu>
+    </item>
+
+</menu>

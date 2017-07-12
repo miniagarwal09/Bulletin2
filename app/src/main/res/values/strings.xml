@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Bulletin</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_bulletin3">bulletin3</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="bulletin">Bulletin</string>
+    <string name="short_stories">Short Stories of your surroundings</string>
+    <string name="bulletin_icon">Bulletin Icon</string>
+    <string name="about_us">About us</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="information">Information</string>
+    <string name="interest">Interest</string>
+    <string name="notification">Notification</string>
+    <string name="settings">Settings</string>
+    <string name="terms_of_use">Terms of use</string>
+</resources>
