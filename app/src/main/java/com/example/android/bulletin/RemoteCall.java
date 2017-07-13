@@ -129,6 +129,8 @@ class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
         super.onPostExecute(articles);
         while(true) {
             if(isOnSuccessComplete()) {
+
+                Bulletin.tinyDB.putListObject(category, getArticleArrayList());
                 mainActivity.articleAdaptor = new ArticleAdaptor(getArticleArrayList().size(), mainActivity, getArticleArrayList());
                 mainActivity.recyclerView.setAdapter(mainActivity.articleAdaptor);
                 break;

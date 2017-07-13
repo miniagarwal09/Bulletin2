@@ -70,8 +70,11 @@ class ArticleAdaptor extends RecyclerView.Adapter<ArticleAdaptor.ArticleViewHold
             text=(TextView)view.findViewById(R.id.text);
         }
         void bind(final int number){
-     /*       new Thread(new Runnable()
+
+
+            new Thread(new Runnable()
             {
+
                 public void run()
                 {
                     try
@@ -102,7 +105,7 @@ class ArticleAdaptor extends RecyclerView.Adapter<ArticleAdaptor.ArticleViewHold
                     }
                 }
             }).start();
-*/
+
 
 
 

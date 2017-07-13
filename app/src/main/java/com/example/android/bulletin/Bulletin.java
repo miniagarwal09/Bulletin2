@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.gdevelop.gwt.syncrpc.SyncProxy;
 import com.uibinder.client.GreetingService;
 import com.uibinder.client.GreetingServiceAsync;
+import com.uibinder.shared.Article;
 
 public class Bulletin extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,12 +36,15 @@ public class Bulletin extends AppCompatActivity
     SectionsPagerAdapter mSectionsPagerAdapter;
     public static GreetingServiceAsync greetingServiceAsync;
     ViewPager mViewPager;
+    static TinyDB tinyDB;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tinyDB=new TinyDB(getApplicationContext());
+        tinyDB.clear();
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -170,16 +175,17 @@ public class Bulletin extends AppCompatActivity
 
             switch (position){
                 case 0:
-                    tab1 = new Tab1();
-                    b=new Bundle();
-                    b.putString("Category","Trending");
-                    tab1.setArguments(b);
-                    return tab1;
+
+                        tab1 = new Tab1();
+                        b=new Bundle();
+                        b.putString("Category","Trending");
+                        tab1.setArguments(b);
+
 
                 case 1:
                     tab2 = new Tab1();
                     b=new Bundle();
-                    b.putString("Category","National");
+                    b.putString("Category","Trending");
                     tab2.setArguments(b);
                     return tab2;
 
@@ -214,7 +220,7 @@ public class Bulletin extends AppCompatActivity
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 6;
         }
 
         @Override
