@@ -21,7 +21,7 @@ class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
     ArrayList<Article> articleArrayList=new ArrayList<Article>();
     boolean onSuccessComplete=false;
     String category="";
-    GreetingServiceAsync greetingServiceAsync;
+    GreetingServiceAsync greetingServiceAsync=Bulletin.greetingServiceAsync;
 
     public boolean isOnSuccessComplete() {
         return onSuccessComplete;
@@ -42,21 +42,27 @@ class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
     RemoteCall(Tab1 mainActivity,String category) {
         this.mainActivity = mainActivity;
         this.category=category;
+
     }
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+    }
 
     @Override
     protected ArrayList<Article> doInBackground(final String... params) {
         Log.d("Remote Call", "Called");
-
         SyncProxy.setBaseURL("http://192.168.1.8:8080/bulletin2/uibinder/");
         greetingServiceAsync = SyncProxy.create(GreetingService.class);
-        if(category.equals("Trending")) {
-            fetch_android(true, greetingServiceAsync);
-        }
-        else if(category.equals("Entertainment"))
-            fetch_android(true,greetingServiceAsync);
-        return getArticleArrayList();
+                if (category.equals("Trending")) {
+                    fetch_android(true, greetingServiceAsync);
+                } else
+                    fetch_android(false, greetingServiceAsync);
+                return getArticleArrayList();
+
+
     }
 
     private void fetch_android(final boolean all ,final GreetingServiceAsync greetingServiceAsync) {
@@ -128,5 +134,9 @@ class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
                 break;
             }
         }
+    }
+    private void updateUi(){
+
+
     }
 }

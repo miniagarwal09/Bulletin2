@@ -21,55 +21,45 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.gdevelop.gwt.syncrpc.SyncProxy;
+import com.uibinder.client.GreetingService;
+import com.uibinder.client.GreetingServiceAsync;
 
 public class Bulletin extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     ActionBarDrawerToggle toggle;
-    ViewPager viewPager;
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+    SectionsPagerAdapter mSectionsPagerAdapter;
+    public static GreetingServiceAsync greetingServiceAsync;
+    ViewPager mViewPager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+    //ViewPager
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-
+    //Drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
 
     }
@@ -97,46 +87,6 @@ public class Bulletin extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.bulletin, menu);
-        return true;
-    }
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }*/
-
-    /*   @Override
-       public boolean onOptionsItemSelected(MenuItem item) {
-           // Handle action bar item clicks here. The action bar will
-           // automatically handle clicks on the Home/Up button, so long
-           // as you specify a parent activity in AndroidManifest.xml.
-           int id = item.getItemId();
-
-           //noinspection SimplifiableIfStatement
-
-           return super.onOptionsItemSelected(item);
-       }
-   */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-
-       /* if (id == R.id.action_settings) {
-        return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
-    }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -144,8 +94,6 @@ public class Bulletin extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentManager fragmentManager = getFragmentManager();
-
-
         if (id == R.id.bookmark) {
             fragmentManager.beginTransaction().replace(R.id.content_bulletin,new SecondFragment()).commit();
             // Handle the camera action
@@ -160,20 +108,10 @@ public class Bulletin extends AppCompatActivity
         }else if (id ==R.id.termsofuse) {
             fragmentManager.beginTransaction().replace(R.id.content_bulletin,new SeventhFragment()).commit();
         }
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
-
-
-
-
-
 
     /**
      * A placeholder fragment containing a simple view.
@@ -214,16 +152,22 @@ public class Bulletin extends AppCompatActivity
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(android.support.v4.app.FragmentManager fm) {
+        private SectionsPagerAdapter(android.support.v4.app.FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
             Tab1 tab1;
+            Tab1 tab2;
+            Tab1 tab3;
+            Tab1 tab4;
+            Tab1 tab5;
+            Tab1 tab6;
             Bundle b;
+
             switch (position){
                 case 0:
                     tab1 = new Tab1();
@@ -233,36 +177,36 @@ public class Bulletin extends AppCompatActivity
                     return tab1;
 
                 case 1:
-                    tab1 = new Tab1();
-                    b=new Bundle();
-                    b.putString("Category","Entertainment");
-                    tab1.setArguments(b);
-                    return tab1;
-
-                case 2:
-                    tab1 = new Tab1();
-                    b=new Bundle();
-                    b.putString("Category","International");
-                    tab1.setArguments(b);
-                    return tab1;
-                case 3:
-                    tab1 = new Tab1();
+                    tab2 = new Tab1();
                     b=new Bundle();
                     b.putString("Category","National");
-                    tab1.setArguments(b);
-                    return tab1;
-                case 4:
-                    tab1 = new Tab1();
+                    tab2.setArguments(b);
+                    return tab2;
+
+                case 2:
+                    tab3 = new Tab1();
+                    b=new Bundle();
+                    b.putString("Category","International");
+                    tab3.setArguments(b);
+                    return tab3;
+                case 3:
+                    tab4 = new Tab1();
                     b=new Bundle();
                     b.putString("Category","Sports");
-                    tab1.setArguments(b);
-                    return tab1;
+                    tab4.setArguments(b);
+                    return tab4;
+                case 4:
+                    tab5 = new Tab1();
+                    b=new Bundle();
+                    b.putString("Category","Entertainment");
+                    tab5.setArguments(b);
+                    return tab5;
                 case 5:
-                    tab1 = new Tab1();
+                    tab6 = new Tab1();
                     b=new Bundle();
                     b.putString("Category","Other");
-                    tab1.setArguments(b);
-                    return tab1;
+                    tab6.setArguments(b);
+                    return tab6;
             }
             return null;
         }
@@ -270,7 +214,7 @@ public class Bulletin extends AppCompatActivity
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 6;
+            return 3;
         }
 
         @Override
@@ -279,15 +223,15 @@ public class Bulletin extends AppCompatActivity
                 case 0:
                     return "Trending News";
                 case 1:
-                    return "World";
+                    return "National";
                 case 2:
-                    return "India";
+                    return "International";
                 case 3:
                     return  "Sports";
                 case 4:
-                    return  "entertainment";
+                    return  "Entertainment";
                 case 5:
-                    return  "business";
+                    return  "Other";
             }
             return null;
         }

@@ -19,26 +19,30 @@ public class Tab1 extends Fragment {
 
     ArticleAdaptor articleAdaptor;
     RecyclerView recyclerView;
-    String category="";
+    String category = "";
     Tab1 tab1;
-    ArrayList<Article> articles=new ArrayList<Article>();
+    ArrayList<Article> articles;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        tab1=this;
-        Bundle b=getArguments();
-        category=(String)b.get("Category");
 
-        RemoteCall remoteCall=new RemoteCall(this,category);
-        remoteCall.execute("Making Background Remote Call");
-        View rootView=inflater.inflate(R.layout.article_layout,container,false);
-
-        recyclerView=(RecyclerView)rootView.findViewById(R.id.article_view_container);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
+        tab1 = this;
+        Bundle b = getArguments();
+        category = (String) b.get("Category");
+        View rootView = inflater.inflate(R.layout.article_layout, container, false);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.article_view_container);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        articleAdaptor=new ArticleAdaptor(0,this,articles);
+        articleAdaptor = new ArticleAdaptor(0, this, articles);
         recyclerView.setAdapter(articleAdaptor);
+
+            RemoteCall remoteCall = new RemoteCall(this, category);
+            remoteCall.execute("Making Background Remote Call");
+
+
+
+
 
         return rootView;
     }
