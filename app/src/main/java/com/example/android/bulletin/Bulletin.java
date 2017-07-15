@@ -1,6 +1,7 @@
 package com.example.android.bulletin;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -44,27 +45,28 @@ public class Bulletin extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tinyDB=new TinyDB(getApplicationContext());
-        tinyDB.clear();
+
+
         //Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+      //  Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       // setSupportActionBar(toolbar);
 
+        //Drawer
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+      //  toggle = new ActionBarDrawerToggle(
+         //       this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //drawer.addDrawerListener(toggle);
+        //toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
 
-    //ViewPager
+        //ViewPager
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-    //Drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
 
     }
@@ -73,13 +75,13 @@ public class Bulletin extends AppCompatActivity
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        toggle.syncState();
+        //toggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
+        //toggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -100,18 +102,23 @@ public class Bulletin extends AppCompatActivity
         int id = item.getItemId();
         FragmentManager fragmentManager = getFragmentManager();
         if (id == R.id.bookmark) {
-            fragmentManager.beginTransaction().replace(R.id.content_bulletin,new SecondFragment()).commit();
-            // Handle the camera action
+            Intent intent=new Intent(this,BookMark.class);
+            startActivity(intent);
+
         } else if (id == R.id.interest) {
-           fragmentManager.beginTransaction().replace(R.id.content_bulletin,new ThirdFragment()).commit();
+            Intent intent=new Intent(this,BookMark.class);
+            startActivity(intent);
         } else if (id == R.id.notification) {
-            fragmentManager.beginTransaction().replace(R.id.content_bulletin,new ForthFragment()).commit();
+            Intent intent=new Intent(this,BookMark.class);
+            startActivity(intent);;
 
         } else if (id == R.id.aboutus) {
-            fragmentManager.beginTransaction().replace(R.id.content_bulletin,new SixthFragment()).commit();
+            Intent intent=new Intent(this,BookMark.class);
+            startActivity(intent);
 
         }else if (id ==R.id.termsofuse) {
-            fragmentManager.beginTransaction().replace(R.id.content_bulletin,new SeventhFragment()).commit();
+            Intent intent=new Intent(this,BookMark.class);
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

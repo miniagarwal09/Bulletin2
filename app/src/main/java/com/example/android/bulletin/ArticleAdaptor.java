@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.uibinder.shared.Article;
 
 import java.io.IOException;
@@ -21,8 +22,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static android.R.attr.fragment;
+
 
 class ArticleAdaptor extends RecyclerView.Adapter<ArticleAdaptor.ArticleViewHolder>{
+
+
+
 
     private int numberItems;
     Tab1 mainActivity;
@@ -44,6 +50,9 @@ class ArticleAdaptor extends RecyclerView.Adapter<ArticleAdaptor.ArticleViewHold
 
     @Override
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
+        Glide.with(mainActivity)
+                .load("http://192.168.1.8:8080/bulletin2/"+articles.get(position).getImage())
+                .into(holder.imageView);
 
         holder.bind(position);
     }
@@ -71,7 +80,7 @@ class ArticleAdaptor extends RecyclerView.Adapter<ArticleAdaptor.ArticleViewHold
         }
         void bind(final int number){
 
-
+/*
             new Thread(new Runnable()
             {
 
@@ -104,7 +113,9 @@ class ArticleAdaptor extends RecyclerView.Adapter<ArticleAdaptor.ArticleViewHold
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            }).start();*/
+
+           // GlideApp.with(this).load("http://goo.gl/gEgYUd").into(imageView);
 
 
 

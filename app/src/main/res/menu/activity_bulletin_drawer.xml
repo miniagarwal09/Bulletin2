@@ -3,7 +3,7 @@
 
 
         <item
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/settings"
             android:title="@string/settings">
             <menu>
                 <item
@@ -16,14 +16,15 @@
                     android:title="@string/interest" />
                 <item
                     android:id="@+id/notification"
-                    android:icon="@drawable/notifiaction"
+                    android:icon="@drawable/notification"
                     android:title="@string/notification" />
 
             </menu>
         </item>
 
 
-    <item android:title="@string/information">
+    <item android:title="@string/information"
+        android:icon="@drawable/info">
         <menu>
             <item
                 android:id="@+id/aboutus"

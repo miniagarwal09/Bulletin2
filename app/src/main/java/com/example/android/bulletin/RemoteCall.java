@@ -54,7 +54,7 @@ class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
     @Override
     protected ArrayList<Article> doInBackground(final String... params) {
         Log.d("Remote Call", "Called");
-        SyncProxy.setBaseURL("http://192.168.1.8:8080/bulletin2/uibinder/");
+        SyncProxy.setBaseURL("http://192.168.43.85:8080/bulletin2/uibinder/");
         greetingServiceAsync = SyncProxy.create(GreetingService.class);
                 if (category.equals("Trending")) {
                     fetch_android(true, greetingServiceAsync);
