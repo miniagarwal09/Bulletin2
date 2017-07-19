@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "248086853319",
-    "firebase_url": "https://main-55c9d.firebaseio.com",
-    "project_id": "main-55c9d",
-    "storage_bucket": "main-55c9d.appspot.com"
+    "project_number": "1062689626414",
+    "firebase_url": "https://bulletin-2222b.firebaseio.com",
+    "project_id": "bulletin-2222b",
+    "storage_bucket": "bulletin-2222b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:248086853319:android:cb4378076bb90c53",
+        "mobilesdk_app_id": "1:1062689626414:android:cb4378076bb90c53",
         "android_client_info": {
           "package_name": "com.example.android.bulletin"
         }
       },
       "oauth_client": [
         {
-          "client_id": "248086853319-gon82pakshj0in9pb6i79ooacvmjvsj4.apps.googleusercontent.com",
+          "client_id": "1062689626414-uguqi48lgmevgvv9usbd7ohg41hf31nn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD89PiQiNr7Q8Kx7qYvqYrkVsD7xbUgZRs"
+          "current_key": "AIzaSyAvvOa3fgjuN7oHNuSgF9GSU5gS_pAn3_M"
         }
       ],
       "services": {

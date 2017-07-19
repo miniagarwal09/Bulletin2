@@ -50,10 +50,10 @@ class ArticleAdaptor extends RecyclerView.Adapter<ArticleAdaptor.ArticleViewHold
 
     @Override
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
-        Glide.with(mainActivity)
-                .load("http://192.168.1.8:8080/bulletin2/"+articles.get(position).getImage())
+     /*   Glide.with(mainActivity)
+                .load("http://192.168.1.3:8080/bulletin/"+articles.get(position).getImage())
                 .into(holder.imageView);
-
+*/
         holder.bind(position);
     }
 

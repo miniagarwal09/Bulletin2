@@ -19,4 +19,5 @@ public interface GreetingService extends RemoteService {
 	ArrayList<Article> fetch_article();
 	ArrayList<Article> fetch_article(String category);
 	String fetch_article_android();
+	String add_registration_ids(String token);
 }

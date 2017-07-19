@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gdevelop.gwt.syncrpc.SyncProxy;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.uibinder.client.GreetingService;
 import com.uibinder.client.GreetingServiceAsync;
 import com.uibinder.shared.Article;
@@ -44,6 +45,11 @@ public class Bulletin extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+      //  if( FirebaseInstanceId.getInstance().getToken()!=null){
+        //String token = FirebaseInstanceId.getInstance().getToken();
+        //new RemoteCall(this).execute(token);
+        //}
+   //     Log.d("___",token);
         tinyDB=new TinyDB(getApplicationContext());
 
 
@@ -219,15 +225,18 @@ public class Bulletin extends AppCompatActivity
                     b=new Bundle();
                     b.putString("Category","Other");
                     tab6.setArguments(b);
+
                     return tab6;
+
             }
+
             return null;
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 6;
+            return 1;
         }
 
         @Override

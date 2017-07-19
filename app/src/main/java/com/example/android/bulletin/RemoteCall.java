@@ -22,6 +22,7 @@ class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
     boolean onSuccessComplete=false;
     String category="";
     GreetingServiceAsync greetingServiceAsync=Bulletin.greetingServiceAsync;
+    private boolean tokenRefreshed;
 
     public boolean isOnSuccessComplete() {
         return onSuccessComplete;
@@ -45,6 +46,12 @@ class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
 
     }
 
+    RemoteCall(MyFirebaseInstanceIDService myFirebaseInstanceIDService){
+        tokenRefreshed=true;
+    }
+    RemoteCall(Bulletin b){
+        tokenRefreshed=true;
+    }
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -54,15 +61,29 @@ class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
     @Override
     protected ArrayList<Article> doInBackground(final String... params) {
         Log.d("Remote Call", "Called");
-        SyncProxy.setBaseURL("http://192.168.43.85:8080/bulletin2/uibinder/");
+        SyncProxy.setBaseURL("http://192.168.1.3:8080/bulletin/uibinder/");
         greetingServiceAsync = SyncProxy.create(GreetingService.class);
-                if (category.equals("Trending")) {
+                if(tokenRefreshed){
+                    greetingServiceAsync.add_registration_ids(params[0], new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            Log.d("___token",throwable.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(String s) {
+
+                            Log.d("___token",s);
+                        }
+                    });
+
+                }
+                else if (category.equals("Trending"))
+                {
                     fetch_android(true, greetingServiceAsync);
                 } else
                     fetch_android(false, greetingServiceAsync);
                 return getArticleArrayList();
-
-
     }
 
     private void fetch_android(final boolean all ,final GreetingServiceAsync greetingServiceAsync) {
