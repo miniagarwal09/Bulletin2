@@ -23,4 +23,6 @@ public interface GreetingServiceAsync {
 	void fetch_article(String category,AsyncCallback<ArrayList<Article>> asyncCallback);
 
 	void fetch_article_android(AsyncCallback<String> asyncCallback);
+
+	void add_registration_ids(String token, AsyncCallback<String> asyncCallback);
 }
