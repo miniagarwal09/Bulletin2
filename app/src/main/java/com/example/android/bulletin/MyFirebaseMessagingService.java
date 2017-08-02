@@ -1,17 +1,28 @@
 package com.example.android.bulletin;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.uibinder.shared.Article;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import static android.R.attr.canRequestFilterKeyEvents;
+import static android.R.attr.smallIcon;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -38,12 +49,60 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
+            Notification notification = new NotificationCompat.Builder(this)
+                    .setContentTitle(remoteMessage.getData().get("title"))
+                    .setContentText(remoteMessage.getData().get("text"))
+                    .setContentIntent(PendingIntent.getActivity(this,0,new Intent(this,Bulletin.class),0))
+                    .setSmallIcon(R.drawable.bulls)
+                    .build();
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
+            manager.notify(123, notification);
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
-
+            Article article=new Article();
+            article.setTitle(remoteMessage.getData().get("title"));
+            article.setImage(remoteMessage.getData().get("image"));
+            article.setCategory(remoteMessage.getData().get("category"));
+            article.setMtext(remoteMessage.getData().get("text"));
+            article.setTime(remoteMessage.getData().get("time"));
+            String tags=remoteMessage.getData().get("tags");
+            //Log.d("___tags",tags);
+           // article.setTags();
+            article.setLink(remoteMessage.getData().get("link"));
+            ArrayList<Article> old_trending,old_category;
+            Bulletin.tinyDB=new TinyDB(getApplicationContext());
+            old_trending =Bulletin.tinyDB.getListObject("Trending",Article.class);
+            old_category=Bulletin.tinyDB.getListObject(article.getCategory(),Article.class);
+            old_trending.add(article);
+            old_category.add(article);
+            Collections.sort(old_trending, new Comparator<Article>() {
+            //TODO complete this
+                @Override
+                public int compare(Article o1, Article o2) {
+                    // TODO Auto-generated method stub
+                        if (Long.parseLong(o1.getTime()) > Long.parseLong(o2.getTime())) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                }
+            });
+            Collections.sort(old_category, new Comparator<Article>() {
+                //TODO complete this
+                @Override
+                public int compare(Article o1, Article o2) {
+                    // TODO Auto-generated method stub
+                    if (Long.parseLong(o1.getTime()) > Long.parseLong(o2.getTime())) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
+            Bulletin.tinyDB.putListObject("Trending",old_trending);
+            Bulletin.tinyDB.putListObject(article.getCategory(),old_category);
 
         }
 

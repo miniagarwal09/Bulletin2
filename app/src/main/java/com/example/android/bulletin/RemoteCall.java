@@ -1,7 +1,11 @@
 package com.example.android.bulletin;
 
+
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.gdevelop.gwt.syncrpc.SyncProxy;
@@ -14,89 +18,62 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
+public class RemoteCall extends AsyncTask<String,Void,String> {
 
+    Tab1 tab1;
+    MyFirebaseInstanceIDService myFirebaseInstanceIDService;
+    ArrayList<String> category_list=new ArrayList<String>();
 
-    private Tab1 mainActivity;
-    ArrayList<Article> articleArrayList=new ArrayList<Article>();
-    boolean onSuccessComplete=false;
-    String category="";
-    GreetingServiceAsync greetingServiceAsync=Bulletin.greetingServiceAsync;
-    private boolean tokenRefreshed;
-
-    public boolean isOnSuccessComplete() {
-        return onSuccessComplete;
+    RemoteCall(Tab1 tab1) {
+        this.tab1 = tab1;
     }
 
-    public void setOnSuccessComplete(boolean onSuccessComplete) {
-        this.onSuccessComplete = onSuccessComplete;
+    RemoteCall(MyFirebaseInstanceIDService myFirebaseInstanceIDService) {
+        this.myFirebaseInstanceIDService = myFirebaseInstanceIDService;
     }
 
-    public ArrayList<Article> getArticleArrayList() {
-        return articleArrayList;
-    }
-
-    public void setArticleArrayList(ArrayList<Article> articleArrayList) {
-        this.articleArrayList = articleArrayList;
-    }
-
-    RemoteCall(Tab1 mainActivity,String category) {
-        this.mainActivity = mainActivity;
-        this.category=category;
-
-    }
-
-    RemoteCall(MyFirebaseInstanceIDService myFirebaseInstanceIDService){
-        tokenRefreshed=true;
-    }
-    RemoteCall(Bulletin b){
-        tokenRefreshed=true;
-    }
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-
-    }
 
     @Override
-    protected ArrayList<Article> doInBackground(final String... params) {
-        Log.d("Remote Call", "Called");
-        SyncProxy.setBaseURL("http://192.168.1.3:8080/bulletin/uibinder/");
-        greetingServiceAsync = SyncProxy.create(GreetingService.class);
-                if(tokenRefreshed){
-                    greetingServiceAsync.add_registration_ids(params[0], new AsyncCallback<String>() {
-                        @Override
-                        public void onFailure(Throwable throwable) {
-                            Log.d("___token",throwable.getMessage());
-                        }
+    protected String doInBackground(String... params) {
 
-                        @Override
-                        public void onSuccess(String s) {
+        try {
 
-                            Log.d("___token",s);
-                        }
-                    });
+            SyncProxy.setBaseURL(Bulletin.SERVER_URL + "uibinder/");
+        }
+        catch (Exception e){
+            no_network();
+        }
+        GreetingServiceAsync greetingServiceAsync = SyncProxy.create(GreetingService.class);
 
+        if (myFirebaseInstanceIDService != null) {
+            greetingServiceAsync.add_registration_ids(params[0], new AsyncCallback<String>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    Log.d("___token", throwable.getMessage());
                 }
-                else if (category.equals("Trending"))
-                {
-                    fetch_android(true, greetingServiceAsync);
-                } else
-                    fetch_android(false, greetingServiceAsync);
-                return getArticleArrayList();
-    }
 
-    private void fetch_android(final boolean all ,final GreetingServiceAsync greetingServiceAsync) {
-        if(all) {
+                @Override
+                public void onSuccess(String s) {
+
+                    Log.d("___token", s);
+                }
+            });
+
+        } else {
+            category_list.add("National");
+            category_list.add("International");
+            category_list.add("Sports");
+            category_list.add("Entertainment");
+            category_list.add("Other");
+
             greetingServiceAsync.fetch_article(new AsyncCallback<ArrayList<Article>>() {
                 @Override
                 public void onFailure(Throwable throwable) {
-                    Log.getStackTraceString(throwable);
+                    Log.d("___", throwable.getMessage());
                 }
 
                 @Override
-                public void onSuccess(ArrayList<Article> articles) {
-                    Log.d("Remote Call Add Article", "Article Fetched");
+                public void onSuccess(final ArrayList<Article> articles) {
                     Collections.sort(articles, new Comparator<Article>() {
 
                         @Override
@@ -109,57 +86,67 @@ class RemoteCall extends AsyncTask<String,Void,ArrayList<Article>> {
                             }
                         }
                     });
-                    setArticleArrayList(articles);
-                    setOnSuccessComplete(true);
-                    //Log.d("__1",getArticleArrayList().get(0).toString());
+                    Bulletin.tinyDB.putListObject("Trending", articles);
                 }
             });
-        }
-        else {
-            greetingServiceAsync.fetch_article(category,new AsyncCallback<ArrayList<Article>>() {
-                @Override
-                public void onFailure(Throwable throwable) {
-                    Log.getStackTraceString(throwable);
-                }
 
-                @Override
-                public void onSuccess(ArrayList<Article> articles) {
-                    Log.d("Remote Call Add Article", "Article Fetched");
-                    Collections.sort(articles, new Comparator<Article>() {
+            for(final String category:category_list){
+                greetingServiceAsync.fetch_article(category, new AsyncCallback<ArrayList<Article>>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        Log.d("___",throwable.getMessage());
+                    }
 
-                        @Override
-                        public int compare(Article o1, Article o2) {
-                            // TODO Auto-generated method stub
-                            if (Long.parseLong(o1.getTime()) > Long.parseLong(o2.getTime())) {
-                                return -1;
-                            } else {
-                                return 1;
+                    @Override
+                    public void onSuccess(ArrayList<Article> articles) {
+                        Collections.sort(articles, new Comparator<Article>() {
+
+                            @Override
+                            public int compare(Article o1, Article o2) {
+                                // TODO Auto-generated method stub
+                                if (Long.parseLong(o1.getTime()) > Long.parseLong(o2.getTime())) {
+                                    return -1;
+                                } else {
+                                    return 1;
+                                }
                             }
-                        }
-                    });
-                    setArticleArrayList(articles);
-                    setOnSuccessComplete(true);
-                    //Log.d("__1",getArticleArrayList().get(0).toString());
-                }
-            });
-        }
-    }
-
-    @Override
-    protected void onPostExecute(ArrayList<Article> articles) {
-        super.onPostExecute(articles);
-        while(true) {
-            if(isOnSuccessComplete()) {
-
-                Bulletin.tinyDB.putListObject(category, getArticleArrayList());
-                mainActivity.articleAdaptor = new ArticleAdaptor(getArticleArrayList().size(), mainActivity, getArticleArrayList());
-                mainActivity.recyclerView.setAdapter(mainActivity.articleAdaptor);
-                break;
+                        });
+                        Bulletin.tinyDB.putListObject(category, articles);
+                    }
+                });
             }
+            updateUi();
         }
+        return "doInBackground Finished";
     }
-    private void updateUi(){
+
+    void updateUi(){
+        tab1.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                    tab1.articles = Bulletin.tinyDB.getListObject("Trending", Article.class);
+                if(tab1.articles!=null) {
+                    tab1.articleAdaptor = new ArticleAdaptor(tab1.articles.size(), tab1, tab1.articles);
+                    tab1.recyclerView.setAdapter(tab1.articleAdaptor);
+                }
+            }
+        });
+    }
+
+    void no_network(){
+        tab1.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(tab1.getActivity(),"Can't connect to server",Toast.LENGTH_SHORT).show();
+                tab1.retry.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+    }
 
 
-    }
+
 }
+
+

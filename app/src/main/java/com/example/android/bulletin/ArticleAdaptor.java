@@ -50,10 +50,10 @@ class ArticleAdaptor extends RecyclerView.Adapter<ArticleAdaptor.ArticleViewHold
 
     @Override
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
-     /*   Glide.with(mainActivity)
-                .load("http://192.168.1.3:8080/bulletin/"+articles.get(position).getImage())
+       Glide.with(mainActivity)
+                .load(Bulletin.SERVER_URL+articles.get(position).getImage())
                 .into(holder.imageView);
-*/
+
         holder.bind(position);
     }
 
@@ -79,48 +79,6 @@ class ArticleAdaptor extends RecyclerView.Adapter<ArticleAdaptor.ArticleViewHold
             text=(TextView)view.findViewById(R.id.text);
         }
         void bind(final int number){
-
-/*
-            new Thread(new Runnable()
-            {
-
-                public void run()
-                {
-                    try
-                    {
-                        URL url = null;
-                        try {
-                            url = new URL("http://192.168.1.8:8080/bulletin2/"+articles.get(number).getImage());
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-                        Bitmap bmp = null;
-                        try {
-                            bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
-                        }
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                        imageView.setImageBitmap(bmp);
-
-
-                    } catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();*/
-
-           // GlideApp.with(this).load("http://goo.gl/gEgYUd").into(imageView);
-
-
-
-
-
             if(!articles.get(number).getTitle().equals(""))
             title.setText(articles.get(number).getTitle());
             if(!articles.get(number).getMtext().equals(""))

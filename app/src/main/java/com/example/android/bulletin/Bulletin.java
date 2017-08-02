@@ -31,6 +31,12 @@ import com.uibinder.client.GreetingService;
 import com.uibinder.client.GreetingServiceAsync;
 import com.uibinder.shared.Article;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class Bulletin extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -39,19 +45,59 @@ public class Bulletin extends AppCompatActivity
     public static GreetingServiceAsync greetingServiceAsync;
     ViewPager mViewPager;
     static TinyDB tinyDB;
+    static String SERVER_URL="http://192.168.1.6:8080/bulletin_web/";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-      //  if( FirebaseInstanceId.getInstance().getToken()!=null){
-        //String token = FirebaseInstanceId.getInstance().getToken();
-        //new RemoteCall(this).execute(token);
-        //}
-   //     Log.d("___",token);
         tinyDB=new TinyDB(getApplicationContext());
+     /*  Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            //bundle must contain all info sent in "data" field of the notification
+            Article article=new Article();
+            JSONObject data=(JSONObject)bundle.get("data");
+            if(data!=null)
+            Log.d("___data",data.toString());
+            else
+                Log.d("___data","No data");
+            article.setTitle(bundle.getString("title"));
+            article.setImage(bundle.getString("image"));
+            article.setCategory(bundle.getString("category"));
+            article.setMtext(bundle.getString("text"));
+            article.setTime(bundle.getString("time"));
+           // ArrayList<String> tags=(ArrayList<String>)bundle.get("tags");
+            //Log.d("___tags",tags.toString());
+            // article.setTags();
+            article.setLink(bundle.getString("link"));
+            Log.d("___notified article",article.toString());
+            ArrayList<Article> old=new ArrayList<Article>();
+            old =Bulletin.tinyDB.getListObject("Trending",Article.class);
+            old.add(article);
+            /*for(Article a : old){
+                Log.d("___a",a.toString());
 
+            }
+            //TODO complete this2
+            if(old.size()!=0) {
+                Collections.sort(old, new Comparator<Article>() {
+
+                    @Override
+                    public int compare(Article o1, Article o2) {
+                        // TODO Auto-generated method stub
+                       // Log.d("___",o1.getTime()+o1.getTitle()+" "+o2.getTime()+"\n");
+                        if (Long.parseLong(o1.getTime()) > Long.parseLong(o2.getTime())) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
+            }
+            Bulletin.tinyDB.putListObject("Trending",old);
+
+        }*/
 
         //Toolbar
       //  Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -188,17 +234,15 @@ public class Bulletin extends AppCompatActivity
 
             switch (position){
                 case 0:
-
-                        tab1 = new Tab1();
-                        b=new Bundle();
-                        b.putString("Category","Trending");
-                        tab1.setArguments(b);
-
-
+                    tab1 = new Tab1();
+                    b=new Bundle();
+                    b.putString("Category","Trending");
+                    tab1.setArguments(b);
+                    return tab1;
                 case 1:
                     tab2 = new Tab1();
                     b=new Bundle();
-                    b.putString("Category","Trending");
+                    b.putString("Category","National");
                     tab2.setArguments(b);
                     return tab2;
 
@@ -236,7 +280,7 @@ public class Bulletin extends AppCompatActivity
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 1;
+            return 6;
         }
 
         @Override

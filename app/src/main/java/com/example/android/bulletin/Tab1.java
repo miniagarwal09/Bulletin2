@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.uibinder.shared.Article;
 
@@ -18,43 +19,35 @@ import java.util.ArrayList;
 public class Tab1 extends Fragment {
     @Nullable
 
+    ArrayList<Article> articles;
     ArticleAdaptor articleAdaptor;
     RecyclerView recyclerView;
-    String category;
-    Tab1 tab1;
-    ArrayList<Article> articles;
-
+    ImageButton retry;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.article_layout, container, false);
+        retry=(ImageButton)getActivity().findViewById(R.id.retry);
+        Bundle bundle=getArguments();
+        String category=bundle.getString("Category");
         recyclerView = (RecyclerView) rootView.findViewById(R.id.article_view_container);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        Bundle b = getArguments();
-        category = (String) b.get("Category");
         recyclerView.setLayoutManager(linearLayoutManager);
-        if(Bulletin.tinyDB.getListObject(category,Article.class).size()!=0){
+
+        if(category.equals("Trending")&&Bulletin.tinyDB.getListObject("Trending",Article.class).size()==0){
+            Tab1 tab1 = this;
+            articleAdaptor = new ArticleAdaptor(0, this, articles);
+            recyclerView.setAdapter(articleAdaptor);
+            RemoteCall remoteCall=new RemoteCall(this);
+            remoteCall.execute();
+        }
+        else{
             articles = Bulletin.tinyDB.getListObject(category,Article.class);
-            Log.d("___a",category);
-            Log.d("___a",String.valueOf(Bulletin.tinyDB.getListObject(category, Article.class).size()));
             articleAdaptor = new ArticleAdaptor(articles.size(), this, articles);
             recyclerView.setAdapter(articleAdaptor);
         }
-        else
-            {
-               // Bulletin.tinyDB = new TinyDB(getContext());
-                Log.d("___b",category);
-                Log.d("___b",String.valueOf(Bulletin.tinyDB.getListObject(category, Article.class).size()));
-                tab1 = this;
-                articleAdaptor = new ArticleAdaptor(0, this, articles);
-                recyclerView.setAdapter(articleAdaptor);
-                RemoteCall remoteCall = new RemoteCall(this, category);
-                remoteCall.execute("Making Background Remote Call");
-            }
-
-
-
         return rootView;
     }
 }
